@@ -1181,7 +1181,7 @@ void Window::openStateWindow(LoadSave ls) {
 	m_stateWindow = new LoadSaveState(m_controller);
 	connect(this, &Window::shutdown, m_stateWindow, &QWidget::close);
 	connect(m_stateWindow, &LoadSaveState::closed, [this]() {
-		attachWidget(m_display.get());
+		reloadDisplayDriver();
 		m_stateWindow = nullptr;
 		QMetaObject::invokeMethod(this, "setFocus", Qt::QueuedConnection);
 	});
@@ -1992,9 +1992,7 @@ void Window::setController(CoreController* controller, const QString& fname) {
 		appendMRU(fname);
 	}
 
-	if (!m_display) {
-		reloadDisplayDriver();
-	}
+	reloadDisplayDriver();
 
 	m_controller = std::shared_ptr<CoreController>(controller);
 	m_inputController.recalibrateAxes();
